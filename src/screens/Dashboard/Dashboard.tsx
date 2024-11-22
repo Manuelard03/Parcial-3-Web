@@ -1,15 +1,27 @@
+import { useNavigate } from 'react-router-dom';
 import "./dashboard.css";
 
-interface DashboardProps {
-  poems: {
-    id: string;
-    title: string;
-    excerpt: string;
-  }[];
-  onViewPoem: (id: string) => void;
+interface Poem {
+  id: string;
+  title: string;
+  excerpt: string;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ poems, onViewPoem }) => {
+interface DashboardProps {
+  poems: Poem[];
+}
+
+const Dashboard: React.FC<DashboardProps> = ({ poems }) => {
+  const navigate = useNavigate();
+
+  const onReadMore = (id: string) => {
+    navigate(`/poem/${id}`);
+  };
+
+  const onCreatePoem = () => {
+    navigate('/create-poem');
+  }; 
+
   return (
     <div className="dashboard">
       <h1 className="dashboard-title">Poem Dashboard</h1>
@@ -18,12 +30,11 @@ const Dashboard: React.FC<DashboardProps> = ({ poems, onViewPoem }) => {
           <div key={poem.id} className="poem-card">
             <h2 className="poem-title">{poem.title}</h2>
             <p className="poem-excerpt">{poem.excerpt}...</p>
-            <button className="poem-button" onClick={() => onViewPoem(poem.id)}>
-              Read More
-            </button>
+            <button className="poem-button" onClick={() => onReadMore(poem.id)}>Read More</button>
           </div>
         ))}
       </div>
+      <button className="create-poem-button" onClick={onCreatePoem}>Create Poem</button>
     </div>
   );
 };
